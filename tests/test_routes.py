@@ -141,12 +141,12 @@ class TestAccountService(TestCase):
 
     def update_an_account(self):
         """Test the update function for updating an existing account"""
-        #create a mock account to update
+        # create a mock account to update
         test_account = AccountFactory()
         resp = self.client.post(BASE_URL, json=test_account.serialize())
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        #update the account now
+        # update the account now
         new_account = resp.get_json()
         new_account['name'] = "Something that is known"
         resp = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
@@ -154,18 +154,17 @@ class TestAccountService(TestCase):
         updated_account = resp.get_json
         self.assertEqual(updated_account["name"], "Something that is known")
 
-    
     def delete_an_account(self):
         """tests when you need to delete an account"""
         account = self._create_accounts(1)[0]
         resp = self.client.delete(f"{BASE_URL}/{account.id}")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-    
+
     def test_method_not_allowed(self):
         """It should not allow an illegal method calll"""
         resp = self.client.delete(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-    
+
     def test_get_account_list(self):
         """It should Get a list of Accounts"""
         self._create_accounts(5)
